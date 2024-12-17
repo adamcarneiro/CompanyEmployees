@@ -20,7 +20,7 @@ namespace Repository {
             FindByCondition(e => e.CompanyId.Equals(companyId) && e.Id.Equals(employeeId), trackChanges).SingleOrDefault();
 
         public IEnumerable<Employee> GetEmployees(Guid companyId, bool trackChanges)
-                => FindByCondition(e=> e.CompanyId.Equals(e.CompanyId), trackChanges)
+                => FindByCondition(e=> e.CompanyId.Equals(companyId), trackChanges)
             .OrderBy(e => e.Name).ToList();
             
     }
