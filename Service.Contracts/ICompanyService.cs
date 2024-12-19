@@ -15,5 +15,8 @@ namespace Service.Contracts {
         
         //Delete a company
         void DeleteCompany(Guid companyId, bool trackChanges);
+
+        //Update a Company
+        void UpdateCompany(Guid companyId, CompanyForUpdateDto companyForUpdate, bool trackChanges);
     }
 }
