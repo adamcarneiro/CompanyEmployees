@@ -33,6 +33,9 @@ namespace CompanyEmployees.Presentation.Controllers {
         public IActionResult CreateEmplyeeForCompany(Guid companyId, [FromBody] EmployeeForCreationDto employee) {
             if (employee is null)
                 return BadRequest("EmployeeForCreationDto object is null");
+
+            if (!ModelState.IsValid)
+                return UnprocessableEntity(ModelState);
             
             var employeeToReturn = _services.EmployeeService.CreateEmployeeForCompany(companyId, employee, trackChanges: false);
             return CreatedAtRoute("GetEmployeeForCompany",new { companyId, id= employeeToReturn.Id }, employeeToReturn);
