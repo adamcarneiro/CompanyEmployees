@@ -18,13 +18,13 @@ namespace CompanyEmployees.Presentation.Controllers {
         [HttpGet]
         public IActionResult GetCompanies() {
             //throw new Exception("Exception");
-            var companies = _service.CompanyService.GetAllCompanies(trackChanges: false);
+            var companies = _service.CompanyService.GetAllCompaniesAsync(trackChanges: false);
             return Ok(companies);
         }
 
         [HttpGet("{id:guid}", Name = "CompanyById")]
         public IActionResult GetCompany(Guid id) {
-            var company = _service.CompanyService.GetCompany(id, trackChanges: false);
+            var company = _service.CompanyService.GetCompanyAsync(id, trackChanges: false);
             return Ok(company);
         }
 
@@ -35,13 +35,13 @@ namespace CompanyEmployees.Presentation.Controllers {
             if (!ModelState.IsValid)
                 return UnprocessableEntity(ModelState);
 
-            var createdCompany = _service.CompanyService.CreateCompany(company);
+            var createdCompany = _service.CompanyService.CreateCompanyAsync(company);
             return CreatedAtRoute("CompanyById", new { id = createdCompany.Id }, createdCompany);
         }
 
         [HttpGet("collection/({ids})", Name = "CompanyCollection")]
         public IActionResult GetCompanyCollection([ModelBinder(BinderType = typeof(ArrayModelBinder))] IEnumerable<Guid> ids) {
-            var companies = _service.CompanyService.GetByIds(ids, trackChanges: false);
+            var companies = _service.CompanyService.GetByIdsAsync(ids, trackChanges: false);
             return Ok(companies);
 
         }
@@ -49,14 +49,14 @@ namespace CompanyEmployees.Presentation.Controllers {
         [HttpPost("collection")]
         public IActionResult CreateCompanyCollection([FromBody] IEnumerable<CompanyForCreationDto> companyCollection) {
             var result =
-            _service.CompanyService.CreateCompanyCollection(companyCollection);
+            _service.CompanyService.CreateCompanyCollectionAsync(companyCollection);
             return CreatedAtRoute("CompanyCollection", new { result.ids },
             result.companies);
         }
 
         [HttpDelete("{id:guid}")]
         public IActionResult DeleteCompany(Guid id) {
-            _service.CompanyService.DeleteCompany(id, trackChanges: false);
+            _service.CompanyService.DeleteCompanyAsync(id, trackChanges: false);
             return NoContent();
         }
 
@@ -64,7 +64,7 @@ namespace CompanyEmployees.Presentation.Controllers {
         public IActionResult UpdateCompany(Guid id, [FromBody] CompanyForUpdateDto company) {
             if (company is null)
                 return BadRequest("CompanyForUpdateDto object is null");
-            _service.CompanyService.UpdateCompany(id, company, trackChanges:true);
+            _service.CompanyService.UpdateCompanyAsync(id, company, trackChanges:true);
             return NoContent();
         }
     }
