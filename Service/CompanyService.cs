@@ -27,7 +27,7 @@ namespace Service {
             var companyEntity = _mapper.Map<Company>(company);
 
             _repository.Company.CreateCompany(companyEntity);
-            _repository.Save();
+            _repository.SaveAsync();
 
             var companyToReturn = _mapper.Map<CompanyDto>(companyEntity);
             return companyToReturn;
@@ -35,7 +35,7 @@ namespace Service {
 
         public IEnumerable<CompanyDto> GetAllCompanies(bool trackChanges) {
            
-                var companies = _repository.Company.GetAllCompanies(trackChanges);
+                var companies = _repository.Company.GetAllCompaniesAsync(trackChanges);
 
                 var companiesDto = _mapper.Map<IEnumerable<CompanyDto>>(companies);
                 return companiesDto;
@@ -45,7 +45,7 @@ namespace Service {
             if (ids is null)
                 throw new IdParametersBadRequestException();
 
-            var companyEntities = _repository.Company.GetByIds(ids, trackChanges);
+            var companyEntities = _repository.Company.GetByIdsAsync(ids, trackChanges);
             if (ids.Count() != companyEntities.Count())
                 throw new CollectionByIdsBadRequestException();
             var companiesToReturn = _mapper.Map<IEnumerable<CompanyDto>>(companyEntities);
@@ -72,7 +72,7 @@ namespace Service {
             foreach ( var company in companyEntities) {
                 _repository.Company.CreateCompany(company);
             }
-            _repository.Save();
+            _repository.SaveAsync();
 
             var companyCollectionToReturn = _mapper.Map<IEnumerable<CompanyDto>>(companyEntities);
             var ids = string.Join(",", companyCollectionToReturn.Select(c => c.Id));
@@ -87,7 +87,7 @@ namespace Service {
             if (company is null)
                 throw new CompanyNotFoundException(companyId);
             _repository.Company.DeleteCompany(company);
-            _repository.Save();
+            _repository.SaveAsync();
         }
 
         public void UpdateCompany(Guid companyId, CompanyForUpdateDto companyForUpdate, bool trackChanges) {
@@ -96,7 +96,7 @@ namespace Service {
                 throw new CompanyNotFoundException(companyId);
 
             _mapper.Map(companyEntity, companyForUpdate);
-            _repository.Save();
+            _repository.SaveAsync();
         }
     }
 }

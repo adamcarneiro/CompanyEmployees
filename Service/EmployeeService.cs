@@ -31,7 +31,7 @@ namespace Service {
             var employeeEntity = _mapper.Map<Employee>(employeeForCreationDto);
 
             _repository.Employee.CreateEmployeeForCompany(companyId, employeeEntity);
-            _repository.Save();
+            _repository.SaveAsync();
 
             var employeeToReturn = _mapper.Map<EmployeeDto>(employeeEntity);
             return employeeToReturn;
@@ -49,7 +49,7 @@ namespace Service {
                 throw new EmployeeNotFoundException(id);
 
             _repository.Employee.DeleteEmployee(employeeForCompany);
-            _repository.Save();
+            _repository.SaveAsync();
         }
 
         public EmployeeDto GetEmployee(Guid companyId, Guid employeeId, bool trackChanges) {
@@ -86,7 +86,7 @@ namespace Service {
                 throw new EmployeeNotFoundException(id);
 
             _mapper.Map(employeeForUpdate, employeeEntity);
-            _repository.Save();
+            _repository.SaveAsync();
         }
     }
 }
